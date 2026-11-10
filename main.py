@@ -154,10 +154,25 @@ def save_gift(state: State, name: str, price: float, person_name: str) -> Page:
     for person in state.recipients:
         if person.name == person_name:
             if person.limit > 0 and person_planned(person) + price > person.limit:
-                return Page(state, [...])  # keep your existing warning page here
+                return Page(state, [
+                    Header("Over Person Limit"),
+                    "Adding " + name + " ($" + str(price) + ") puts " + person_name +
+                    " over their $" + str(person.limit) + " limit.",
+                    Button("Add Anyway", confirm_gift, [Argument("name", name),
+                                                        Argument("price", price),
+                                                        Argument("person_name", person_name)]),
+                    Button("Cancel", view_person, [Argument("person_name", person_name)])
+                ])
     # Check 2: the overall budget
     if total_planned(state.recipients) + price > state.budget:
-        return Page(state, [...])  # keep your existing warning page here
+        return Page(state, [
+            Header("Over Budget Warning"),
+            "Adding " + name + " ($" + str(price) + ") will put you over your budget of $" + str(state.budget) + ".",
+            Button("Add Anyway", confirm_gift, [Argument("name", name),
+                                                Argument("price", price),
+                                                Argument("person_name", person_name)]),
+            Button("Cancel", view_person, [Argument("person_name", person_name)])
+        ])
     # No limits passed, so add the gift
     return confirm_gift(state, name, price, person_name)
 
