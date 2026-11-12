@@ -2,6 +2,17 @@ from dataclasses import dataclass
 from drafter import *
 from bakery import assert_equal
 
+set_website_title("Corgi Cafe")
+set_site_information(
+    author="Natalie Pesarchick",
+    description="A christmas list organizing website",
+    sources="Thanks to the Drafter docs and my study group.",
+    planning=["plan.pdf", "design.pdf"],
+    links=["https://github.com/natpes/christmas-list"]
+)
+hide_debug_information()
+set_website_framed(False)
+
 @dataclass
 class Gift:
     name: str
